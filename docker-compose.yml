@@ -6,6 +6,7 @@ services:
       context: ./api
       dockerfile: Dockerfile
     container_name: api-service
+    image: caddy-gateway-api:latest
     labels:
       - "virtual.host=api.shopsthai.com"
       - "virtual.port=3000"
@@ -22,13 +23,14 @@ services:
 
   web1:
     build:
-      context: ./web
+      context: ./web1
       dockerfile: Dockerfile
       args:
         - VITE_SSO_AUTH_SERVER=${VITE_SSO_AUTH_SERVER}
         - VITE_SSO_REALM=${VITE_SSO_REALM}
+        - VITE_SSO_CLIENTID=${VITE_SSO_CLIENTID}
         - VITE_API_URL=${VITE_API_URL}
-    image: caddy-gateway-web:latest
+    image: caddy-gateway-web1:latest
     container_name: web1-app
     labels:
       - "virtual.host=web1.shopsthai.com"
@@ -38,16 +40,22 @@ services:
       - "auth.realm=shopthai.app"
       - "auth.clientid=shopthai-web1"
     env_file:
-      - ./web/.env
+      - ./web1/.env
     environment:
       - NODE_ENV=production
       - TZ=Asia/Bangkok
 
   web2:
-    image: caddy-gateway-web:latest
+    build:
+      context: ./web2
+      dockerfile: Dockerfile
+      args:
+        - VITE_SSO_AUTH_SERVER=${VITE_SSO_AUTH_SERVER}
+        - VITE_SSO_REALM=${VITE_SSO_REALM}
+        - VITE_SSO_CLIENTID=${VITE_SSO_CLIENTID}
+        - VITE_API_URL=${VITE_API_URL}
+    image: caddy-gateway-web2:latest
     container_name: web2-app
-    depends_on:
-      - web1
     labels:
       - "virtual.host=web2.shopsthai.com"
       - "virtual.port=8080"
