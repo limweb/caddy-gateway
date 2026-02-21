@@ -9,7 +9,7 @@ ARG VITE_API_URL
 ENV VITE_SSO_AUTH_SERVER=$VITE_SSO_AUTH_SERVER
 ENV VITE_SSO_REALM=$VITE_SSO_REALM
 ENV VITE_API_URL=$VITE_API_URL
-RUN bun run build
+RUN bunx vite build
 
 FROM caddy:2-alpine
 COPY --from=builder /app/dist /srv/www/

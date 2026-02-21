@@ -28,6 +28,7 @@ services:
         - VITE_SSO_AUTH_SERVER=${VITE_SSO_AUTH_SERVER}
         - VITE_SSO_REALM=${VITE_SSO_REALM}
         - VITE_API_URL=${VITE_API_URL}
+    image: caddy-gateway-web:latest
     container_name: web1-app
     volumes:
       - ./Caddyfile.web1:/etc/caddy/Caddyfile:ro
@@ -45,9 +46,7 @@ services:
       - TZ=Asia/Bangkok
 
   web2:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
+    image: caddy-gateway-web:latest
     container_name: web2-app
     volumes:
       - ./Caddyfile.web2:/etc/caddy/Caddyfile:ro
