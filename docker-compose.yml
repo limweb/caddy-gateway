@@ -48,13 +48,7 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile
-      args:
-        - VITE_SSO_AUTH_SERVER=${VITE_SSO_AUTH_SERVER}
-        - VITE_SSO_REALM=${VITE_SSO_REALM}
-        - VITE_API_URL=${VITE_API_URL}
     container_name: web2-app
-    ports:
-      - "8082:8080"
     volumes:
       - ./Caddyfile.web2:/etc/caddy/Caddyfile:ro
     labels:
