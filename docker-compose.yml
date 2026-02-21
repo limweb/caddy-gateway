@@ -30,8 +30,6 @@ services:
         - VITE_API_URL=${VITE_API_URL}
     image: caddy-gateway-web:latest
     container_name: web1-app
-    volumes:
-      - ./Caddyfile.web1:/etc/caddy/Caddyfile:ro
     labels:
       - "virtual.host=web1.shopsthai.com"
       - "virtual.port=8080"
@@ -48,8 +46,8 @@ services:
   web2:
     image: caddy-gateway-web:latest
     container_name: web2-app
-    volumes:
-      - ./Caddyfile.web2:/etc/caddy/Caddyfile:ro
+    depends_on:
+      - web1
     labels:
       - "virtual.host=web2.shopsthai.com"
       - "virtual.port=8080"
