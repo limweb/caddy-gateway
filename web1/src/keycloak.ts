@@ -13,9 +13,7 @@ export const isAuthenticated = ref(false);
 export const initKeycloak = async () => {
   try {
     const authenticated = await keycloakInstance.init({
-      onLoad: "check-sso",
-      silentCheckSsoRedirectUri:
-        window.location.origin + "/silent-check-sso.html",
+      onLoad: "login-required",
       checkLoginIframe: false,
     });
     isAuthenticated.value = authenticated;
