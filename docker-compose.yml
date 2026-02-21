@@ -15,7 +15,6 @@ services:
       - "auth.server=sso.shopsthai.com"
       - "auth.realm=shopsthai.app"
       - "auth.clientid=shopsthai-api"
-      - "auth.roles=admin,manager"
     env_file:
       - ./api/.env
     environment:
