@@ -1,0 +1,76 @@
+version: "3.8"
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api-service
+    labels:
+      - "virtual.host=api.shopsthai.com"
+      - "virtual.port=3000"
+      - "virtual.tls=internal"
+      - "auth.validatejwt=true"
+      - "auth.server=sso.shopsthai.com"
+      - "auth.realm=shopthai.app"
+      - "auth.clientid=shopthai-api"
+    env_file:
+      - ./api/.env
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Bangkok
+
+  web1:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - VITE_SSO_AUTH_SERVER=${VITE_SSO_AUTH_SERVER}
+        - VITE_SSO_REALM=${VITE_SSO_REALM}
+        - VITE_API_URL=${VITE_API_URL}
+    container_name: web1-app
+    volumes:
+      - ./Caddyfile.web1:/etc/caddy/Caddyfile:ro
+    labels:
+      - "virtual.host=web1.shopsthai.com"
+      - "virtual.port=8080"
+      - "virtual.tls=internal"
+      - "auth.server=sso.shopsthai.com"
+      - "auth.realm=shopthai.app"
+      - "auth.clientid=shopthai-web1"
+    env_file:
+      - ./web/.env
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Bangkok
+
+  web2:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - VITE_SSO_AUTH_SERVER=${VITE_SSO_AUTH_SERVER}
+        - VITE_SSO_REALM=${VITE_SSO_REALM}
+        - VITE_API_URL=${VITE_API_URL}
+    container_name: web2-app
+    ports:
+      - "8082:8080"
+    volumes:
+      - ./Caddyfile.web2:/etc/caddy/Caddyfile:ro
+    labels:
+      - "virtual.host=web2.shopsthai.com"
+      - "virtual.port=8080"
+      - "virtual.tls=internal"
+      - "auth.server=sso.shopsthai.com"
+      - "auth.realm=shopthai.app"
+      - "auth.clientid=shopthai-web2"
+    env_file:
+      - ./web/.env
+    environment:
+      - NODE_ENV=production
+      - TZ=Asia/Bangkok
+
+networks:
+  default:
+    external:
+      name: proxy-network
