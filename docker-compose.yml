@@ -13,8 +13,8 @@ services:
       - "virtual.tls=internal"
       - "auth.validatejwt=true"
       - "auth.server=sso.shopsthai.com"
-      - "auth.realm=shopthai.app"
-      - "auth.clientid=shopthai-api"
+      - "auth.realm=shopsthai.app"
+      - "auth.clientid=shopsthai-api"
     env_file:
       - ./api/.env
     environment:
@@ -37,8 +37,8 @@ services:
       - "virtual.port=8080"
       - "virtual.tls=internal"
       - "auth.server=sso.shopsthai.com"
-      - "auth.realm=shopthai.app"
-      - "auth.clientid=shopthai-web1"
+      - "auth.realm=shopsthai.app"
+      - "auth.clientid=shopsthai-web1"
     env_file:
       - ./web1/.env
     environment:
@@ -61,8 +61,8 @@ services:
       - "virtual.port=8080"
       - "virtual.tls=internal"
       - "auth.server=sso.shopsthai.com"
-      - "auth.realm=shopthai.app"
-      - "auth.clientid=shopthai-web2"
+      - "auth.realm=shopsthai.app"
+      - "auth.clientid=shopsthai-web2"
     env_file:
       - ./web2/.env
     environment:
