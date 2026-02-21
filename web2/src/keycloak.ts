@@ -4,7 +4,7 @@ import { ref } from "vue";
 const keycloakConfig = {
   url: `https://${import.meta.env.VITE_SSO_AUTH_SERVER || "sso.shopsthai.com"}`,
   realm: import.meta.env.VITE_SSO_REALM || "shopsthai.app",
-  clientId: import.meta.env.VITE_SSO_CLIENTID || "shopthai-web2",
+  clientId: import.meta.env.VITE_SSO_CLIENTID || "shopsthai-web2",
 };
 
 export const keycloakInstance = new Keycloak(keycloakConfig);
