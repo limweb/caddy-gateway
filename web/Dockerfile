@@ -1,7 +1,7 @@
-FROM node:20-alpine as builder
+FROM oven/bun:1-alpine as builder
 WORKDIR /app
 COPY package*.json ./
-RUN npm ci
+RUN bun install
 COPY . .
 ARG VITE_SSO_AUTH_SERVER
 ARG VITE_SSO_REALM
@@ -9,7 +9,7 @@ ARG VITE_API_URL
 ENV VITE_SSO_AUTH_SERVER=$VITE_SSO_AUTH_SERVER
 ENV VITE_SSO_REALM=$VITE_SSO_REALM
 ENV VITE_API_URL=$VITE_API_URL
-RUN npm run build
+RUN bun run build
 
 FROM caddy:2-alpine
 COPY --from=builder /app/dist /srv/www/
