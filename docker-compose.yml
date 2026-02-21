@@ -64,7 +64,7 @@ services:
       - "auth.realm=shopthai.app"
       - "auth.clientid=shopthai-web2"
     env_file:
-      - ./web/.env
+      - ./web2/.env
     environment:
       - NODE_ENV=production
       - TZ=Asia/Bangkok
