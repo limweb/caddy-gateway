@@ -9,17 +9,23 @@ const keycloakConfig = {
 
 export const keycloakInstance = new Keycloak(keycloakConfig);
 export const isAuthenticated = ref(false);
+let isInitialized = false;
 
 export const initKeycloak = async () => {
+  if (isInitialized) return;
+  isInitialized = true;
+
   try {
     const authenticated = await keycloakInstance.init({
-      onLoad: "login-required",
+      onLoad: "check-sso",
       checkLoginIframe: false,
+      pkceMethod: "S256",
     });
+
     isAuthenticated.value = authenticated;
 
-    // Token refresh
     if (authenticated) {
+      console.log("Keycloak authenticated successfully");
       setInterval(() => {
         keycloakInstance.updateToken(70).catch(() => {
           console.error("Failed to refresh token");
@@ -28,6 +34,7 @@ export const initKeycloak = async () => {
     }
   } catch (error) {
     console.error("Keycloak init failed:", error);
+    // Don't throw - let the app show login button instead of looping
   }
 };
 

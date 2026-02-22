@@ -7,56 +7,34 @@ const keycloakConfig = {
   clientId: import.meta.env.VITE_SSO_CLIENTID || "shopsthai-web1",
 };
 
-console.log("Keycloak Config:", keycloakConfig);
-
 export const keycloakInstance = new Keycloak(keycloakConfig);
 export const isAuthenticated = ref(false);
+let isInitialized = false;
 
 export const initKeycloak = async () => {
-  try {
-    console.log("Starting Keycloak init...");
-    console.log("Current URL:", window.location.href);
+  if (isInitialized) return;
+  isInitialized = true;
 
+  try {
     const authenticated = await keycloakInstance.init({
-      onLoad: "login-required",
+      onLoad: "check-sso",
       checkLoginIframe: false,
-      flow: "standard",
       pkceMethod: "S256",
-      enableLogging: true,
     });
 
-    console.log("Keycloak init success, authenticated:", authenticated);
     isAuthenticated.value = authenticated;
 
     if (authenticated) {
-      console.log("Token:", keycloakInstance.token?.substring(0, 20) + "...");
+      console.log("Keycloak authenticated successfully");
       setInterval(() => {
-        keycloakInstance.updateToken(70).catch((err) => {
-          console.error("Failed to refresh token:", err);
+        keycloakInstance.updateToken(70).catch(() => {
+          console.error("Failed to refresh token");
         });
       }, 60000);
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Keycloak init failed:", error);
-    console.error("Error details:", error?.message || "No message");
-    console.error("Error stack:", error?.stack || "No stack");
-
-    // If token endpoint fails due to CORS but we have code in URL, try manual token parse
-    if (window.location.hash && window.location.hash.includes("access_token")) {
-      console.log("Found token in URL hash, parsing manually...");
-      const hash = window.location.hash.substring(1);
-      const params = new URLSearchParams(hash);
-      const token = params.get("access_token");
-      if (token) {
-        console.log("Manual token found:", token.substring(0, 20) + "...");
-        // Store token and mark as authenticated
-        keycloakInstance.token = token;
-        isAuthenticated.value = true;
-        return true;
-      }
-    }
-
-    throw error;
+    // Don't throw - let the app show login button instead of looping
   }
 };
 

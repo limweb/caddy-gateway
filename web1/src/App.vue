@@ -17,8 +17,6 @@ const error = ref("");
 
 onMounted(async () => {
   await initKeycloak();
-  console.log("Auth status:", isAuthenticated.value);
-  console.log("Token exists:", !!keycloakInstance.token);
   if (isAuthenticated.value) {
     await loadData();
   }
