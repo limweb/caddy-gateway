@@ -17,6 +17,8 @@ const error = ref("");
 
 onMounted(async () => {
   await initKeycloak();
+  console.log("Auth status:", isAuthenticated.value);
+  console.log("Token exists:", !!keycloakInstance.token);
   if (isAuthenticated.value) {
     await loadData();
   }
@@ -26,25 +28,38 @@ const loadData = async () => {
   loading.value = true;
   error.value = "";
   try {
+    const token = keycloakInstance.token;
+    console.log("API_URL:", API_URL);
+    console.log(
+      "Token preview:",
+      token ? token.substring(0, 20) + "..." : "NO TOKEN",
+    );
+
     // Load user profile
     const profileRes = await fetch(`${API_URL}/me`, {
       headers: {
-        Authorization: `Bearer ${keycloakInstance.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
-    if (!profileRes.ok) throw new Error("Failed to load profile");
+    console.log("Profile response status:", profileRes.status);
+    if (!profileRes.ok) {
+      const errText = await profileRes.text();
+      console.error("Profile error:", errText);
+      throw new Error(`Failed to load profile: ${profileRes.status}`);
+    }
     userProfile.value = await profileRes.json();
 
     // Load datas
     const dataRes = await fetch(`${API_URL}/datas`, {
       headers: {
-        Authorization: `Bearer ${keycloakInstance.token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
     if (!dataRes.ok) throw new Error("Failed to load data");
     apiData.value = await dataRes.json();
   } catch (err: any) {
     error.value = err.message;
+    console.error("loadData error:", err);
   } finally {
     loading.value = false;
   }
