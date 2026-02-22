@@ -19,6 +19,7 @@ export const initKeycloak = async () => {
       onLoad: "login-required",
       checkLoginIframe: false,
       flow: "standard",
+      pkceMethod: "S256",
       enableLogging: true,
     });
     console.log("Keycloak init success, authenticated:", authenticated);
