@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 import { jwtVerify, createRemoteJWKSet } from "jose";
+import { cors } from "@elysiajs/cors";
 
 const SSO_SERVER = process.env.SSO_AUTH_SERVER || "sso.shopsthai.com";
 const SSO_REALM = process.env.SSO_REALM || "shopsthai.app";
@@ -11,6 +12,14 @@ const ISSUER = `https://${SSO_SERVER}/realms/${SSO_REALM}`;
 const jwks = createRemoteJWKSet(new URL(JWKS_URI));
 
 const app = new Elysia()
+  .use(
+    cors({
+      origin: true,
+      methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      credentials: true,
+    }),
+  )
   .onBeforeHandle(async ({ request, set }) => {
     const authHeader = request.headers.get("authorization");
     if (!authHeader || !authHeader.startsWith("Bearer ")) {

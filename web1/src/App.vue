@@ -23,6 +23,7 @@ onMounted(async () => {
 });
 
 const loadData = async () => {
+  debugger;
   loading.value = true;
   error.value = "";
   try {
@@ -46,7 +47,8 @@ const loadData = async () => {
       throw new Error(`Failed to load profile: ${profileRes.status}`);
     }
     userProfile.value = await profileRes.json();
-
+    debugger;
+    console.log("--token---", token);
     // Load datas
     const dataRes = await fetch(`${API_URL}/datas`, {
       headers: {

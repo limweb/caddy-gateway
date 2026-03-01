@@ -7,7 +7,8 @@
   },
   "dependencies": {
     "elysia": "^1.0.0",
-    "jose": "^5.0.0"
+    "jose": "^5.0.0",
+    "@elysiajs/cors": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

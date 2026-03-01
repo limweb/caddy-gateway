@@ -12,6 +12,7 @@ export const isAuthenticated = ref(false);
 let isInitialized = false;
 
 export const initKeycloak = async () => {
+  debugger;
   if (isInitialized) return;
   isInitialized = true;
 
@@ -19,6 +20,7 @@ export const initKeycloak = async () => {
     const authenticated = await keycloakInstance.init({
       onLoad: "check-sso",
       checkLoginIframe: false,
+      flow: "implicit",
       pkceMethod: "S256",
     });
 
