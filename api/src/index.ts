@@ -41,29 +41,11 @@ const app = new Elysia()
   })
   .get("/me", ({ request }) => {
     const user = (request as any).user;
-    const headers = request.headers;
-
     return {
-      // ข้อมูลจาก JWT token
-      jwt: {
-        sub: user.sub,
-        email: user.email,
-        name: user.name,
-        preferred_username: user.preferred_username,
-      },
-      // ข้อมูลจาก headers ที่ Caddy ส่งมา (สำหรับ debug)
-      headers: {
-        "X-User-Sub": headers.get("X-User-Sub"),
-        "X-User-Email": headers.get("X-User-Email"),
-        "X-User-Roles": headers.get("X-User-Roles"),
-        "X-User-Name": headers.get("X-User-Name"),
-        "X-User-Preferred-Username": headers.get("X-User-Preferred-Username"),
-        "X-User-Given-Name": headers.get("X-User-Given-Name"),
-        "X-User-Family-Name": headers.get("X-User-Family-Name"),
-        "X-User-Email-Verified": headers.get("X-User-Email-Verified"),
-        Authorization: headers.get("Authorization"),
-        Host: headers.get("Host"),
-      },
+      sub: user.sub,
+      email: user.email,
+      name: user.name,
+      preferred_username: user.preferred_username,
     };
   })
   .get("/datas", () => {
