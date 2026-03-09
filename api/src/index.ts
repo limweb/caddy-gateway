@@ -41,7 +41,7 @@ const app = new Elysia()
   .get("/me", ({ request }) => {
     // const user = (request as any).user;
     return {
-      headers: JSON.stringify(request.headers),
+      headers: JSON.parse(JSON.stringify(request.headers)),
       // sub: user.sub,
       // email: user.email,
       // name: user.name,
