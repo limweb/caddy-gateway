@@ -21,23 +21,22 @@ const app = new Elysia()
     }),
   )
   .onBeforeHandle(async ({ request, set }) => {
-    const authHeader = request.headers.get("authorization");
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      set.status = 401;
-      return { error: "Missing or invalid Authorization header" };
-    }
-
-    const token = authHeader.substring(7);
-    try {
-      const { payload } = await jwtVerify(token, jwks, {
-        issuer: ISSUER,
-        audience: "account",
-      });
-      (request as any).user = payload;
-    } catch (err) {
-      set.status = 401;
-      return { error: "Invalid token" };
-    }
+    // const authHeader = request.headers.get("authorization");
+    // if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    //   set.status = 401;
+    //   return { error: "Missing or invalid Authorization header" };
+    // }
+    // const token = authHeader.substring(7);
+    // try {
+    //   const { payload } = await jwtVerify(token, jwks, {
+    //     issuer: ISSUER,
+    //     audience: "account",
+    //   });
+    //   (request as any).user = payload;
+    // } catch (err) {
+    //   set.status = 401;
+    //   return { error: "Invalid token" };
+    // }
   })
   .get("/me", ({ request }) => {
     const user = (request as any).user;
