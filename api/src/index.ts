@@ -39,12 +39,13 @@ const app = new Elysia()
     // }
   })
   .get("/me", ({ request }) => {
-    const user = (request as any).user;
+    // const user = (request as any).user;
     return {
-      sub: user.sub,
-      email: user.email,
-      name: user.name,
-      preferred_username: user.preferred_username,
+      headers: JSON.stringify(request.headers),
+      // sub: user.sub,
+      // email: user.email,
+      // name: user.name,
+      // preferred_username: user.preferred_username,
     };
   })
   .get("/datas", () => {
